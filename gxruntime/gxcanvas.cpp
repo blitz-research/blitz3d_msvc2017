@@ -4,6 +4,7 @@
 #include "gxgraphics.h"
 #include "gxruntime.h"
 #include "asmcoder.h"
+#include "gxutf8.h"
 
 #define DEBUG_BITMASK
 
@@ -471,12 +472,14 @@ void gxCanvas::text( int x,int y,const string &t ){
 	if( tx>=viewport.right ) return;
 
 	int b=0,w;
-	while( b<t.size() && tx+(w=font->charWidth( t[b] ))<=viewport.left ){
-		tx+=w;x+=w;++b;
+	while (b < t.size() && tx + (w = font->charAdvance(UTF8::decodeCharacter(t.c_str(), b))) <= viewport.left) {
+		tx += w; x += w;
+		b += UTF8::measureCodepoint(t[b]);
 	}
 	int e=b;
 	while( e<t.size() && tx<viewport.right ){
-		tx+=font->charWidth( t[e] );++e;
+		tx += font->charAdvance(UTF8::decodeCharacter(t.c_str(), e));
+		e += UTF8::measureCodepoint(t[e]);
 	}
 
 	if( e>b ) font->render( this,format.toARGB( color_surf ),x,y,t.substr( b,e-b ) );
