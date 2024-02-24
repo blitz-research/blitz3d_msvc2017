@@ -476,9 +476,9 @@ FT_BEGIN_HEADER
 #if defined( _WIN32 ) && defined( DLL_IMPORT )
 #define FT_EXPORT( x )  __declspec( dllimport )  x
 #elif defined( __cplusplus )
-#define FT_EXPORT( x )  extern "C"  x
+#define FT_EXPORT( x )  extern "C"  x _cdecl
 #else
-#define FT_EXPORT( x )  extern  x
+#define FT_EXPORT( x )  extern  x _cdecl
 #endif
 
 #endif
