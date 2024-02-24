@@ -396,6 +396,25 @@ void  bbTextureBlend( Texture *t,int blend ){
 	t->setBlend( blend );
 }
 
+void  bbTextureBumpEnvMat(Texture* t, int x, int y, float envmat) {
+	debugTexture(t);
+	t->setBumpEnvMat(x, y, envmat);
+}
+
+void  bbTextureBumpEnvScale(Texture* t, float envscale) {
+	debugTexture(t);
+	t->setBumpEnvScale(envscale);
+}
+
+void  bbTextureBumpEnvOffset(Texture* t, float envoffset) {
+	debugTexture(t);
+	t->setBumpEnvOffset(envoffset);
+}
+
+void  bbTextureLodBias(float bias) {
+	gx_scene->textureLodBias = *((DWORD*)&bias);
+}
+
 void  bbTextureCoords( Texture *t,int flags ){
 	debugTexture(t);
 	t->setFlags( flags );
@@ -1989,6 +2008,10 @@ void blitz3d_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "%LoadAnimTexture$file%flags%width%height%first%count",bbLoadAnimTexture );
 	rtSym( "FreeTexture%texture",bbFreeTexture );
 	rtSym( "TextureBlend%texture%blend",bbTextureBlend );
+	rtSym("TextureBumpEnvMat%texture%x%y#envmat", bbTextureBumpEnvMat);
+	rtSym("TextureBumpEnvScale%texture#envmat", bbTextureBumpEnvScale);
+	rtSym("TextureBumpEnvOffset%texture#envoffset", bbTextureBumpEnvOffset);
+	rtSym("TextureLodBias#bias", bbTextureLodBias);
 	rtSym( "TextureCoords%texture%coords",bbTextureCoords );
 	rtSym( "ScaleTexture%texture#u_scale#v_scale",bbScaleTexture );
 	rtSym( "RotateTexture%texture#angle",bbRotateTexture );
