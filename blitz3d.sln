@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34114.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bblaunch", "bblaunch\bblaunch.vcxproj", "{66977C11-BB4E-49BE-AEC8-CC3AFA8120A0}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -128,5 +128,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31C7B764-8574-425D-AC28-07516AF5A0C3}
 	EndGlobalSection
 EndGlobal
