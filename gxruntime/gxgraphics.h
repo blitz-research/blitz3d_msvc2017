@@ -6,6 +6,9 @@
 #include <string>
 #include <d3d.h>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "ddutil.h"
 
 #include "gxfont.h"
@@ -27,6 +30,8 @@ public:
 	DDPIXELFORMAT primFmt,zbuffFmt;
 
 	DDPIXELFORMAT texRGBFmt[2],texAlphaFmt[2],texRGBAlphaFmt[2],texRGBMaskFmt[2];
+
+	FT_Library ftLibrary;
 
 	gxGraphics( gxRuntime *runtime,IDirectDraw7 *dirDraw,IDirectDrawSurface7 *front,IDirectDrawSurface7 *back,bool d3d );
 	~gxGraphics();
