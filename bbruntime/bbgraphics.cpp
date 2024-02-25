@@ -2,6 +2,7 @@
 #include "std.h"
 #include "bbgraphics.h"
 #include "bbinput.h"
+#include "..\gxruntime\gxutf8.h"
 
 gxGraphics *gx_graphics;
 gxCanvas *gx_canvas;
@@ -227,10 +228,13 @@ int bbCountGfxDrivers(){
 }
 
 BBStr *	bbGfxDriverName( int n ){
-	debugDriver( n );
-	string t;int caps;
-	gx_runtime->graphicsDriverInfo( n-1,&t,&caps );
-	return d_new BBStr( t );
+	debugDriver(n);
+	string t;
+	int caps;
+	gx_runtime->graphicsDriverInfo(n - 1, &t, &caps);
+	CString str(t.c_str());
+	UTF8::ANSItoUTF8(str); // Convert t from ANSI to UTF-8
+	return d_new BBStr(str);
 }
 
 void  bbSetGfxDriver( int n ){

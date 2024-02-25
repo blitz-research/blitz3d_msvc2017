@@ -179,6 +179,11 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tabber.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\gxruntime\gxruntime.vcxproj">
+      <Project>{a124d746-4a3b-401d-ae99-6a838595bc8c}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -4,6 +4,7 @@
 #include "resource.h"
 #include "debuggerapp.h"
 #include "prefs.h"
+#include "../gxruntime/gxutf8.h"
 
 #define WM_IDLEUPDATECMDUI  0x0363  // wParam == bDisableIfNoHandler
 
@@ -204,9 +205,9 @@ void MainFrame::debugLeave(){
 
 void MainFrame::debugMsg( const char *msg,bool serious ){
 	if( serious ){
-		::MessageBox( 0,msg,"Runtime Error",MB_OK|MB_ICONWARNING|MB_TOPMOST|MB_SETFOREGROUND );
+		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Runtime Error", MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
 	}else{
-		::MessageBox( 0,msg,"Runtime Message",MB_OK|MB_ICONINFORMATION|MB_TOPMOST|MB_SETFOREGROUND );
+		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Runtime Message", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SETFOREGROUND);
 	}
 }
 
