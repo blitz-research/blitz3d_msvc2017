@@ -1,1 +1,0 @@
-D:\Blitz3D Soure Code\New Engine\freetype\objs\Win32\Release Static\freetype.lib
