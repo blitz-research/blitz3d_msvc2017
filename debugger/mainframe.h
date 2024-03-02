@@ -59,6 +59,9 @@ public:
 	afx_msg void updateCmdUI( CCmdUI *ui );
 
 	afx_msg void OnWindowPosChanging( WINDOWPOS *pos );
+
+	std::wstring utf8_to_wchar(const std::string& str);
+	CString ANSItoUTF8(const CStringA& str);
 };
 
 #endif

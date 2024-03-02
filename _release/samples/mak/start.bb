@@ -2,6 +2,7 @@
 SetGfx()
 
 Function SetGfx()
+
 	If info1$<>""
 		AppTitle info1$,"Exit "+info1$+" ?"
 	EndIf
@@ -21,7 +22,7 @@ Function SetGfx()
 	If Not image image=LoadImage( "../b3dlogo.jpg" )
 	MidHandle image
 	
-	font=LoadFont( "verdana",16 )
+	font = LoadFont ("C:\Windows\Fonts\verdana.ttf",16)
 	SetFont font
 	
 	tx=640+160

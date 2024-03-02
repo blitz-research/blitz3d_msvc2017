@@ -3,6 +3,9 @@
 #include "prefs.h"
 #include "debuggerapp.h"
 #include <fstream>
+#include <codecvt> 
+#include <locale> 
+#include <iostream> 
 
 #define SWAPRB(x) ( (((x)>>16)&0xff) | ((x)&0xff00) | (((x)&0xff)<<16) )
 
@@ -22,6 +25,7 @@ void Prefs::open(){
 
 	while( !in.eof() ){
 		string t;in>>t;
+
 		if( !t.size() ) continue;
 		while( in.peek()=='\t' ) in.ignore();
 		if( t=="prg_debug" ) in>>prg_debug;
@@ -42,12 +46,14 @@ void Prefs::open(){
 			}else if( t=="debug" ){
 				font_debug=s;font_debug_height=h;
 			}
+
 		}else if( t.substr( 0,4 )=="rgb_" ){
 			t=t.substr(4);
 			string s;in>>s;int rgb=0;
 			for( int k=0;k<s.size();++k ){
 				int n=s[k];rgb=(rgb<<4)|(n<='9'?n-'0':(n&31)+9);
 			}
+
 			rgb=SWAPRB(rgb);
 
 			if( t=="bkgrnd" ) rgb_bkgrnd=rgb;
@@ -76,6 +82,8 @@ void Prefs::open(){
 			setDefault();
 			return;
 		}
+
+
 	}
 	createFonts();
 }
@@ -172,3 +180,4 @@ void Prefs::createFonts(){
 	debugFont.CreatePointFont( font_debug_height*10,font_debug.c_str() );
 	conFont.CreatePointFont( 80,"courier" );
 }
+
