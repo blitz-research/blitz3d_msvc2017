@@ -2,6 +2,8 @@
 #ifndef SOURCEFILE_H
 #define SOURCEFILE_H
 
+#include <Windows.h>
+
 class SourceFile : public CRichEditCtrl{
 public:
 	SourceFile();
@@ -13,6 +15,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 
 	afx_msg int  OnCreate( LPCREATESTRUCT lpCreateStruct );
+
 };
 
 #endif

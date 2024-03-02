@@ -172,6 +172,7 @@
   <ItemGroup>
     <Library Include="..\blitz3d\minidx9\lib\d3dxof.lib" />
     <Library Include="..\fmod375\lib\fmodvc.lib" />
+	<Library Include="..\freetype\lib\freetype.lib" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bbruntime\bbruntime.vcxproj">
@@ -193,9 +194,6 @@
     </ProjectReference>
     <ProjectReference Include="..\freeimage\ZLib\ZLib.vcxproj">
       <Project>{7feb7d92-c789-4a2c-b1f3-06c54ce276ee}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\freetype\builds\windows\vc2010\freetype.vcxproj">
-      <Project>{78b079bd-9fc7-4b9e-b4a6-96da0f00248b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\gxruntime\gxruntime.vcxproj">
       <Project>{a124d746-4a3b-401d-ae99-6a838595bc8c}</Project>

@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "sourcefile.h"
 #include "prefs.h"
+#include <windows.h>
 
 IMPLEMENT_DYNAMIC( SourceFile,CRichEditCtrl )
 BEGIN_MESSAGE_MAP( SourceFile,CRichEditCtrl )
@@ -49,3 +50,5 @@ void SourceFile::highLight( int row,int col ){
 	HideSelection( false,false );
 	SetSel( pos,end );
 }
+
+
