@@ -63,7 +63,7 @@ Function SetGfx()
 		If KeyHit( 28 )
 			Cls:Flip
 			Cls:Flip
-			FreeFont font
+			;FreeFont font
 			FreeImage image
 			EndGraphics
 			If mode

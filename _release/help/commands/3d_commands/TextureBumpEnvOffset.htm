@@ -1,0 +1,215 @@
+<html>
+<head>
+<title>Blitz3D Docs</title>
+<link rel=stylesheet href=../css/commands.css type=text/css>
+</head>
+<body>
+<h1>TextureBumpEnvOffset Texture, envoffset#</h1>
+<h1>Parameters</h1>
+<table>
+<tr>
+<td>
+Texture - Texture handle.
+<br />
+envoffset - Floating point offset value for smooth brightness.
+<br />
+
+</td>
+</tr>
+</table>
+<h1>Description</h1>
+<table>
+<tr>
+<td>
+Used to add bump effects to textures.
+<br />
+
+<br />
+But we still need <a class=small href=TextureBumpEnvMat.htm>TextureBumpEnvMat</a> and <a class=small href=TextureBumpEnvScale.htm>TextureBumpEnvScale</a> to do it
+
+</td>
+</tr>
+</table>
+<h1><a href=../3d_examples/TextureBumpOffset.bb>Example</a></h1>
+<table>
+<tr>
+<td>
+; TextureBumpEnvOffset Example
+<br />
+; --------------------
+<br />
+
+<br />
+Graphics3D 640,480
+<br />
+SetBuffer BackBuffer()
+<br />
+
+<br />
+camera=CreateCamera()
+<br />
+
+<br />
+; Choose a background colour which isn't the same colour as anything else, to  avoid confusion
+<br />
+CameraClsColor camera,255,0,0
+<br />
+
+<br />
+light=CreateLight()
+<br />
+RotateEntity light,90,0,0
+<br />
+
+<br />
+cube=CreateCube()
+<br />
+PositionEntity cube,0,0,5
+<br />
+
+<br />
+; Load textures
+<br />
+tex0=LoadTexture( "media/b3dlogo.jpg" )
+<br />
+tex1=LoadTexture( "media/chorme-2.bmp" )
+<br />
+
+<br />
+; Texture cube with textures
+<br />
+EntityTexture cube,tex0,0,0
+<br />
+EntityTexture cube,tex1,0,1
+<br />
+
+<br />
+tex0_blend_info$="no texture"
+<br />
+tex1_blend_info$="no texture"
+<br />
+
+<br />
+While Not KeyDown( 1 )
+<br />
+
+<br />
+; Change texture 0 blending mode
+<br />
+If KeyHit( 11 )=True
+<br />
+tex0_blend=tex0_blend+1
+<br />
+If tex0_blend=4 Then tex0_blend=0
+<br />
+If tex0_blend=0 Then tex0_blend_info$="no texture"
+<br />
+If tex0_blend=1 Then tex0_blend_info$="no blend"
+<br />
+If tex0_blend=2 Then tex0_blend_info$="multiply"
+<br />
+If tex0_blend=3 Then tex0_blend_info$="add"
+<br />
+EndIf
+<br />
+
+<br />
+; Change texture 1 blending mode
+<br />
+If KeyHit( 2 )=True
+<br />
+tex1_blend=tex1_blend+1
+<br />
+If tex1_blend=4 Then tex1_blend=0
+<br />
+If tex1_blend=0 Then tex1_blend_info$="no texture"
+<br />
+If tex1_blend=1 Then tex1_blend_info$="no blend"
+<br />
+If tex1_blend=2 Then tex1_blend_info$="multiply"
+<br />
+If tex1_blend=3 Then tex1_blend_info$="add"
+<br />
+EndIf
+<br />
+
+<br />
+If KeyHit( 31 )=True
+<br />
+TextureBumpEnvMat tex1, 0,0, -0.012
+<br />
+TextureBumpEnvMat tex1, 0,1, -0.012
+<br />
+TextureBumpEnvMat tex1, 1,0,0.012
+<br />
+TextureBumpEnvMat tex1, 1,1,0.012
+<br />
+TextureBumpEnvOffset tex1, 0.5
+<br />
+TextureBumpEnvScale tex1, 1.0
+<br />
+
+<br />
+If KeyHit( 30 )=True
+<br />
+TextureBumpEnvMat tex0, 0,0, -0.012
+<br />
+TextureBumpEnvMat tex0, 0,1, -0.012
+<br />
+TextureBumpEnvMat tex0, 1,0,0.012
+<br />
+TextureBumpEnvMat tex0, 1,1,0.012
+<br />
+TextureBumpEnvOffset tex0, 0.5
+<br />
+TextureBumpEnvScale tex0, 1.0
+<br />
+
+<br />
+; Set texture blend modes
+<br />
+TextureBlend tex0,tex0_blend 
+<br />
+TextureBlend tex1,tex1_blend 
+<br />
+
+<br />
+TurnEntity cube,0.1,0.1,0.1
+<br />
+
+<br />
+RenderWorld
+<br />
+
+<br />
+Text 0,0,"Press 0 to change texture 0's blending mode"
+<br />
+Text 0,20,"Press 1 to change texture 1's blending mode"
+<br />
+Text 0,40,"Press A to change texture 0 To Bump"
+<br />
+Text 0,60,"Press S to change texture 1 To Bump"
+<br />
+Text 0,80,"TextureBlend tex0,"+tex0_blend+" ("+tex0_blend_info$+")"
+<br />
+Text 0,100,"TextureBlend tex1,"+tex1_blend+" ("+tex1_blend_info$+")"
+<br />
+
+<br />
+Flip
+<br />
+
+<br />
+Wend
+<br />
+
+<br />
+End
+</td>
+</tr>
+</table>
+<br>
+<a target=_top href=../index.htm>Index</a><br>
+<br>
+Click <a href=http://www.blitzbasic.co.nz/b3ddocs/command.php?name=TextureBlend&ref=comments target=_blank>here</a> to view the latest version of this page online</body>
+</html>
