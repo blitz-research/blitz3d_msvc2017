@@ -3,11 +3,7 @@
 #include <cstdlib>
 #include "parser.h"
 
-#ifdef DEMO
-static const int TEXTLIMIT=16384;
-#else
 static const int TEXTLIMIT=1024*1024-1;
-#endif
 
 enum{
 	STMTS_PROG,STMTS_BLOCK,STMTS_LINE
@@ -84,11 +80,6 @@ void Parser::parseStmtSeq( StmtSeqNode *stmts,int scope ){
 
 		int pos=toker->pos();
 
-#ifdef DEMO
-		if( Toker::chars_toked>TEXTLIMIT ){
-			ex( "Demo version source limit exceeded" );
-		}
-#endif
 		switch( toker->curr() ){
 		case INCLUDE:
 			{

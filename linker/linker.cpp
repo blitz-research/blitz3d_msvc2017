@@ -130,11 +130,7 @@ int Linker::version(){
 }
 
 bool Linker::canCreateExe(){
-#ifdef DEMO
-	return false;
-#else
 	return true;
-#endif
 }
 
 Module *Linker::createModule(){
@@ -150,10 +146,6 @@ Linker *_cdecl linkerGetLinker(){
 }
 
 bool BBModule::createExe( const char *exe_file,const char *dll_file ){
-
-#ifdef DEMO
-	return false;
-#else
 
 	//find proc address of bbWinMain
 	HMODULE hmod=LoadLibrary( dll_file );if( !hmod ) return false;
@@ -210,5 +202,4 @@ bool BBModule::createExe( const char *exe_file,const char *dll_file ){
 	closeImage();
 
 	return true;
-#endif
 }

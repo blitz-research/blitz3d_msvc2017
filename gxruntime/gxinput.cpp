@@ -66,6 +66,7 @@ public:
 		}
 		DIMOUSESTATE state;
 		if( device->GetDeviceState(sizeof(state),&state)<0 ) return;
+#if BB_BLITZ3D_ENABLED
 		if( gxGraphics *g=input->runtime->graphics ){
 			int mx=axis_states[0]+state.lX;
 			int my=axis_states[1]+state.lY;
@@ -77,6 +78,7 @@ public:
 			axis_states[1]=my;
 			axis_states[2]+=state.lZ;
 		}
+#endif
 		for( int k=0;k<3;++k ){
 			setDownState( k+1,state.rgbButtons[k]&0x80 ? true : false );
 		}

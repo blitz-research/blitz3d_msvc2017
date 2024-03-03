@@ -102,11 +102,9 @@ int bbChannelPlaying( gxChannel *channel ){
 	return channel ? channel->isPlaying() : 0;
 }
 
-#ifdef PRO
 gxSound *bbLoad3DSound( BBStr *f ){
 	return loadSound( f,true );
 }
-#endif
 
 bool audio_create(){
 	gx_audio=gx_runtime->openAudio( 0 );
@@ -136,7 +134,5 @@ void audio_link( void(*rtSym)(const char*,void*) ){
 	rtSym( "ChannelVolume%channel#volume",bbChannelVolume );
 	rtSym( "ChannelPan%channel#pan",bbChannelPan );
 	rtSym( "%ChannelPlaying%channel",bbChannelPlaying );
-#ifdef PRO
 	rtSym( "%Load3DSound$filename",bbLoad3DSound );
-#endif
 }

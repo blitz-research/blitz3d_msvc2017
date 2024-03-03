@@ -142,7 +142,6 @@ void Prefs::setDefault(){
 	font_debug="verdana";
 	font_debug_height=8;
 
-#ifdef PRO
 	rgb_bkgrnd=RGB( 0x22,0x55,0x88 );
 	rgb_string=RGB( 0x00,0xff,0x66 );
 	rgb_ident=RGB( 0xff,0xff,0xff );
@@ -150,8 +149,8 @@ void Prefs::setDefault(){
 	rgb_comment=RGB( 0xff,0xee,0x00 );
 	rgb_digit=RGB( 0x33,0xff,0xdd );
 	rgb_default=RGB( 0xee,0xee,0xee );
-#else
-#ifdef PLUS
+
+#if 0 // BlitzPlus...
 	rgb_bkgrnd=	SWAPRB(0x225577);
 	rgb_string=	SWAPRB(0x00ffff);
 	rgb_ident=	SWAPRB(0xffffff);
@@ -159,7 +158,8 @@ void Prefs::setDefault(){
 	rgb_comment=SWAPRB(0x00ff00);
 	rgb_digit=	SWAPRB(0x00ffff);
 	rgb_default=SWAPRB(0xffffff);
-#else
+#endif
+#if 0 // Blitz2D...
 	rgb_bkgrnd=RGB( 32,96,96 );
 	rgb_string=RGB( 0,255,0 );
 	rgb_ident=RGB( 255,255,255 );
@@ -167,7 +167,6 @@ void Prefs::setDefault(){
 	rgb_comment=RGB( 0,255,255 );
 	rgb_digit=RGB( 200,240,255 );
 	rgb_default=RGB( 255,240,200 );
-#endif
 #endif
 
 	edit_tabs=4;

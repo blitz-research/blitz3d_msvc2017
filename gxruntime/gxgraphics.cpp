@@ -16,9 +16,7 @@ runtime(rt),dirDraw(dd),dir3d(0),dir3dDev(0),def_font(0),gfx_lost(false),dummy_m
 	front_canvas->cls();
 	back_canvas->cls();
 
-	FT_Init_FreeType(&ftLibrary);
-
-	def_font = nullptr;
+	def_font=loadFont( "courier",12,0 );
 
 	front_canvas->setFont( def_font );
 	back_canvas->setFont( def_font );
@@ -41,9 +39,7 @@ runtime(rt),dirDraw(dd),dir3d(0),dir3dDev(0),def_font(0),gfx_lost(false),dummy_m
 
 gxGraphics::~gxGraphics(){
 	if( _gamma ) _gamma->Release();
-#ifdef PRO
 	while( scene_set.size() ) freeScene( *scene_set.begin() );
-#endif
 	while( movie_set.size() ) closeMovie( *movie_set.begin() );
 	while( font_set.size() ) freeFont( *font_set.begin() );
 	while( canvas_set.size() ) freeCanvas( *canvas_set.begin() );
@@ -54,8 +50,6 @@ gxGraphics::~gxGraphics(){
 
 	delete back_canvas;
 	delete front_canvas;
-
-	FT_Done_FreeType(ftLibrary);
 
 	ds_dirDraw->Release();
 
@@ -102,14 +96,12 @@ bool gxGraphics::restore(){
 		(*it)->restore();
 	}
 
-#ifdef PRO
 	//restore all meshes (b3d surfaces)
 	set<gxMesh*>::iterator mesh_it;
 	for( mesh_it=mesh_set.begin();mesh_it!=mesh_set.end();++mesh_it ){
 		(*mesh_it)->restore();
 	}
 	if( dir3d ) dir3d->EvictManagedTextures();
-#endif
 
 	return true;
 }
@@ -236,19 +228,130 @@ int gxGraphics::getDepth()const{
 
 gxFont *gxGraphics::loadFont( const string &f,int height,int flags ){
 
+	int bold=flags & gxFont::FONT_BOLD ? FW_BOLD : FW_REGULAR;
+	int italic=flags & gxFont::FONT_ITALIC ? 1 : 0;
+	int underline=flags & gxFont::FONT_UNDERLINE ? 1 : 0;
+	int strikeout=0;
+
 	string t;
 	int n=f.find('.');
 	if( n!=string::npos ){
 		t=fullfilename(f);
-		if( !font_res.count(t) && AddFontResource( t.c_str() )) font_res.insert( t );
+		if( !font_res.count(t) && AddFontResource( t.c_str() ) ) font_res.insert( t );
 		t=filenamefile( f.substr(0,n) );
 	}else{
 		t=f;
 	}
 
-	gxFont* newFont = new gxFont(ftLibrary, this, f, height, flags);
-	font_set.emplace(newFont);
-	return newFont;
+	//save and turn off font smoothing....
+	BOOL smoothing=FALSE;
+	SystemParametersInfo( SPI_GETFONTSMOOTHING,0,&smoothing,0 );
+	SystemParametersInfo( SPI_SETFONTSMOOTHING,FALSE,0,0 );
+
+	HFONT hfont=CreateFont( 
+		height,0,0,0,
+		bold,italic,underline,strikeout,
+		ANSI_CHARSET,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
+		DEFAULT_PITCH|FF_DONTCARE,t.c_str() );
+
+	if( !hfont ){
+		//restore font smoothing
+		SystemParametersInfo( SPI_SETFONTSMOOTHING,smoothing,0,0 );
+		return 0;
+	}
+
+	HDC hdc=CreateCompatibleDC( 0 );
+	HFONT pfont=(HFONT)SelectObject( hdc,hfont );
+
+	TEXTMETRIC tm={0};
+	if( !GetTextMetrics( hdc,&tm ) ){
+		SelectObject( hdc,pfont );
+		DeleteDC( hdc );
+		DeleteObject( hfont );
+		SystemParametersInfo( SPI_SETFONTSMOOTHING,smoothing,0,0 );
+		return 0;
+	}
+	height=tm.tmHeight;
+
+	int first=tm.tmFirstChar,last=tm.tmLastChar;
+	int sz=last-first+1;
+	int *offs=d_new int[sz];
+	int *widths=d_new int[sz];
+	int *as=d_new int[sz];
+
+	//calc size of canvas to hold font.
+	int x=0,y=0,max_x=0;
+	for( int k=0;k<sz;++k ){
+
+		char t=k+first;
+
+		SIZE sz;
+		GetTextExtentPoint32( hdc,&t,1,&sz );
+		int w=sz.cx;
+
+		as[k]=0;
+
+		ABC abc;
+		if( GetCharABCWidths( hdc,t,t,&abc ) ){
+			if( abc.abcA<0 ){
+				as[k]=ceil(-abc.abcA);
+				w+=as[k];
+			}
+			if( abc.abcC<0 ) w+=ceil(-abc.abcC);
+		}
+
+		if( x && x+w>getWidth() ){ x=0;y+=height; }
+		offs[k]=(x<<16)|y;
+		widths[k]=w;
+		x+=w;if( x>max_x ) max_x=x;
+	}
+	SelectObject( hdc,pfont );
+	DeleteDC( hdc );
+
+	int cw=max_x,ch=y+height;
+
+	if( gxCanvas *c=createCanvas( cw,ch,0 ) ){
+		ddSurf *surf=c->getSurface();
+
+		HDC surf_hdc;
+		if( surf->GetDC( &surf_hdc )>=0 ){
+			HFONT pfont=(HFONT)SelectObject( surf_hdc,hfont );
+
+			SetBkColor( surf_hdc,0x000000 );
+			SetTextColor( surf_hdc,0xffffff );
+
+			for( int k=0;k<sz;++k ){
+				int x=(offs[k]>>16)&0xffff,y=offs[k]&0xffff;
+				char t=k+first;
+				RECT rect={x,y,x+widths[k],y+height};
+				ExtTextOut( surf_hdc,x+as[k],y,ETO_CLIPPED,&rect,&t,1,0 );
+			}
+
+			SelectObject( surf_hdc,pfont );
+			surf->ReleaseDC( surf_hdc );
+			DeleteObject( hfont );
+			delete[] as;
+
+			c->backup();
+			gxFont *font=d_new gxFont( this,c,tm.tmMaxCharWidth,height,first,last+1,tm.tmDefaultChar,offs,widths );
+			font_set.insert( font );
+
+			//restore font smoothing
+			SystemParametersInfo( SPI_SETFONTSMOOTHING,smoothing,0,0 );
+			return font;
+		}else{
+		}
+		freeCanvas( c );
+	}else{
+	}
+	DeleteObject( hfont );
+	delete[] as;
+	delete[] widths;
+	delete[] offs;
+
+	//restore font smoothing
+	SystemParametersInfo( SPI_SETFONTSMOOTHING,smoothing,0,0 );
+	return 0;
 }
 
 gxFont *gxGraphics::verifyFont( gxFont *f ){
@@ -256,15 +359,12 @@ gxFont *gxGraphics::verifyFont( gxFont *f ){
 }
 
 void gxGraphics::freeFont( gxFont *f ){
-	return delete f;
-	//if( font_set.erase( f ) ) delete f;
+	if( font_set.erase( f ) ) delete f;
 }
 
 //////////////
 // 3D STUFF //
 //////////////
-
-#ifdef PRO
 
 static int maxDevType;
 
@@ -509,5 +609,3 @@ gxMesh *gxGraphics::verifyMesh( gxMesh *m ){
 void gxGraphics::freeMesh( gxMesh *mesh ){
 	if( mesh_set.erase( mesh ) ) delete mesh;
 }
-
-#endif

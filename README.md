@@ -1,6 +1,6 @@
 ## Blitz3D open source release.
 
-You will need to install Microsoft Visual Studio. Any recent version should be OK, tested with community editions 2019 and 2022 .
+You will need to install Microsoft Visual Studio. Any recent version should be OK, tested with community editions 2017 and 2022.
 
 When selecting components to install, select "Desktop development with C++", "MFC and ATL support" and "ASP.NET and web development".
 
@@ -20,7 +20,7 @@ cmake --build .
 
 ### To build with Visual Studio
 
-* Open blitz3d.sln in Visual Studio.
+* Open blitz3d.dsw in Visual Studio.
 
 * Select release config and rebuild the entire solution.
 

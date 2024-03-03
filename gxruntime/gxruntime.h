@@ -8,9 +8,11 @@
 
 #include "gxaudio.h"
 #include "gxinput.h"
-#include "gxgraphics.h"
 #include "gxfilesystem.h"
 #include "gxtimer.h"
+#if BB_BLITZ3D_ENABLED
+#include "gxgraphics.h"
+#endif
 
 #include "../debugger/debugger.h"
 
@@ -23,16 +25,19 @@ public:
 
 	gxAudio *audio;
 	gxInput *input;
-	gxGraphics *graphics;
 	gxFileSystem *fileSystem;
 
-	void flip( bool vwait );
 	void moveMouse( int x,int y );
 
 	LRESULT windowProc( HWND hwnd,UINT msg,WPARAM w,LPARAM l );
 
+#if BB_BLITZ3D_ENABLED
 	struct GfxMode;
 	struct GfxDriver;
+	gxGraphics *graphics;
+
+	void flip( bool vwait );
+#endif
 
 private:
 	gxRuntime( HINSTANCE hinst,const std::string &cmd_line,HWND hwnd );
@@ -43,8 +48,6 @@ private:
 	void forceSuspend();
 	void resume();
 	void forceResume();
-	void backupWindowState();
-	void restoreWindowState();
 
 	RECT t_rect;
 	int t_style;
@@ -53,23 +56,27 @@ private:
 	std::string app_title;
 	std::string app_close;
 
-	bool setDisplayMode( int w,int h,int d,bool d3d,IDirectDraw7 *dd );
-	gxGraphics *openWindowedGraphics( int w,int h,int d,bool d3d );
-	gxGraphics *openExclusiveGraphics( int w,int h,int d,bool d3d );
-
+#if BB_BLITZ3D_ENABLED
 	bool enum_all;
 	std::vector<GfxDriver*> drivers;
 	GfxDriver *curr_driver;
-	int use_di;
 
+	bool setDisplayMode( int w,int h,int d,bool d3d,IDirectDraw7 *dd );
+	gxGraphics *openWindowedGraphics( int w,int h,int d,bool d3d );
+	gxGraphics *openExclusiveGraphics( int w,int h,int d,bool d3d );
+	void backupGraphics();
+	void restoreGraphics();
+	void backupWindowState();
+	void restoreWindowState();
 	void enumGfx();
 	void denumGfx();
+#endif
+
+	int use_di;
 
 	void resetInput();
 	void pauseAudio();
 	void resumeAudio();
-	void backupGraphics();
-	void restoreGraphics();
 	void acquireInput();
 	void unacquireInput();
 
@@ -110,23 +117,11 @@ public:
 	void debugError( const char *t );
 	void debugLog( const char *t );
 
-	int numGraphicsDrivers();
-	void graphicsDriverInfo( int driver,std::string *name,int *caps );
-
-	int numGraphicsModes( int driver );
-	void graphicsModeInfo( int driver,int mode,int *w,int *h,int *d,int *caps );
-
-	void windowedModeInfo( int *caps );
-
 	gxAudio *openAudio( int flags );
 	void closeAudio( gxAudio *audio );
 
 	gxInput *openInput( int flags );
 	void closeInput( gxInput *input );
-
-	gxGraphics *openGraphics( int w,int h,int d,int driver,int flags );
-	void closeGraphics( gxGraphics *graphics );
-	bool graphicsLost();
 
 	gxFileSystem *openFileSystem( int flags );
 	void closeFileSystem( gxFileSystem *filesys );
@@ -140,6 +135,20 @@ public:
 	int callDll( const std::string &dll,const std::string &func,const void *in,int in_sz,void *out,int out_sz );
 
 	OSVERSIONINFO osinfo;
+
+#if BB_BLITZ3D_ENABLED
+	gxGraphics *openGraphics( int w,int h,int d,int driver,int flags );
+	void closeGraphics( gxGraphics *graphics );
+	bool graphicsLost();
+
+	int numGraphicsDrivers();
+	void graphicsDriverInfo( int driver,std::string *name,int *caps );
+
+	int numGraphicsModes( int driver );
+	void graphicsModeInfo( int driver,int mode,int *w,int *h,int *d,int *caps );
+
+	void windowedModeInfo( int *caps );
+#endif
 };
 
 #endif

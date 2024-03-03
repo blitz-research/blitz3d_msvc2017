@@ -2,7 +2,6 @@
 #include "std.h"
 #include "bbgraphics.h"
 #include "bbinput.h"
-#include "..\gxruntime\gxutf8.h"
 
 gxGraphics *gx_graphics;
 gxCanvas *gx_canvas;
@@ -87,10 +86,8 @@ static inline void debugMode( int n ){
 void bbFreeImage( bbImage *i );
 
 static void freeGraphics(){
-#ifdef PRO
 	extern void blitz3d_close();
 	blitz3d_close();
-#endif
 	while( image_set.size() ) bbFreeImage( *image_set.begin() );
 	if( p_canvas ){
 		gx_graphics->freeCanvas( p_canvas );
@@ -228,13 +225,10 @@ int bbCountGfxDrivers(){
 }
 
 BBStr *	bbGfxDriverName( int n ){
-	debugDriver(n);
-	string t;
-	int caps;
-	gx_runtime->graphicsDriverInfo(n - 1, &t, &caps);
-	CString str(t.c_str());
-	UTF8::ANSItoUTF8(str); // Convert t from ANSI to UTF-8
-	return d_new BBStr(str);
+	debugDriver( n );
+	string t;int caps;
+	gx_runtime->graphicsDriverInfo( n-1,&t,&caps );
+	return d_new BBStr( t );
 }
 
 void  bbSetGfxDriver( int n ){
@@ -284,7 +278,6 @@ int  bbGfxModeExists( int w,int h,int d ){
 	return modeExists( w,h,d,false );
 }
 
-#ifdef PRO
 int  bbGfxDriver3D( int n ){
 	debugDriver( n );
 	string t;int caps;
@@ -317,7 +310,6 @@ int  bbWindowed3D(){
 	gx_runtime->windowedModeInfo( &tc );
 	return (tc & gxRuntime::GFXMODECAPS_3D) ? 1 : 0;
 }
-#endif
 
 int  bbTotalVidMem(){
 	return gx_graphics->getTotalVidmem();
@@ -401,7 +393,6 @@ void bbGraphics( int w,int h,int d,int mode ){
 	graphics( w,h,d,flags );
 }
 
-#ifdef PRO
 void bbGraphics3D( int w,int h,int d,int mode ){
 	int flags=gxGraphics::GRAPHICS_3D;
 	switch( mode ){
@@ -417,7 +408,6 @@ void bbGraphics3D( int w,int h,int d,int mode ){
 	extern void blitz3d_open();
 	blitz3d_open();
 }
-#endif
 
 void bbEndGraphics(){
 	freeGraphics();
@@ -1226,19 +1216,15 @@ void graphics_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "%AvailVidMem",bbAvailVidMem );
 	rtSym( "%TotalVidMem",bbTotalVidMem );
 
-#ifdef PRO
 	rtSym( "%GfxDriver3D%driver",bbGfxDriver3D );
 	rtSym( "%CountGfxModes3D",bbCountGfxModes3D );
 	rtSym( "%GfxMode3DExists%width%height%depth",bbGfxMode3DExists );
 	rtSym( "%GfxMode3D%mode",bbGfxMode3D );
 	rtSym( "%Windowed3D",bbWindowed3D );
-#endif
 
 	//display mode
 	rtSym( "Graphics%width%height%depth=0%mode=0",bbGraphics );
-#ifdef PRO
 	rtSym( "Graphics3D%width%height%depth=0%mode=0",bbGraphics3D );
-#endif
 	rtSym( "EndGraphics",bbEndGraphics );
 	rtSym( "%GraphicsLost",bbGraphicsLost );
 

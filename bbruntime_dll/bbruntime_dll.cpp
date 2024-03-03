@@ -3,11 +3,6 @@
 
 #include "bbruntime_dll.h"
 #include "../debugger/debugger.h"
-#include "../gxruntime/gxutf8.h"
-
-#ifdef PRODEMO
-#include "../shareprot/shareprot.h"
-#endif
 
 using namespace std;
 
@@ -26,7 +21,7 @@ public:
 	virtual void debugLeave(){}
 	virtual void debugLog( const char *msg ){}
 	virtual void debugMsg( const char *e,bool serious ){
-		if (serious) MessageBoxW(0, UTF8::convertToUtf16(e).c_str(), L"Error!", MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
+		if( serious ) MessageBox( 0,e,"Error!",MB_OK|MB_TOPMOST|MB_SETFOREGROUND );
 	}
 	virtual void debugSys( void *msg ){}
 };
@@ -39,12 +34,6 @@ static gxRuntime *gx_runtime;
 static void rtSym( const char *sym,void *pc ){
 	syms[sym]=pc;
 }
-
-#ifdef PRODEMO
-static void killer(){
-	ExitProcess( -1 );
-}
-#endif
 
 static void _cdecl seTranslator( unsigned int u,EXCEPTION_POINTERS* pExp ){
 	switch( u ){
@@ -99,10 +88,9 @@ void Runtime::execute( void (*pc)(),const char *args,Debugger *dbg ){
 	if( !dbg ) dbg=&dummydebug;
 
 	trackmem( true );
-#ifndef _DEBUG
+
 	_se_translator_function old_trans=_set_se_translator( seTranslator );
 	_control87( _RC_NEAR|_PC_24|_EM_INVALID|_EM_ZERODIVIDE|_EM_OVERFLOW|_EM_UNDERFLOW|_EM_INEXACT|_EM_DENORMAL,0xfffff );
-#endif
 
 	//strip spaces from ends of args...
 	string params=args;
@@ -111,19 +99,15 @@ void Runtime::execute( void (*pc)(),const char *args,Debugger *dbg ){
 
 	if( gx_runtime=gxRuntime::openRuntime( hinst,params,dbg ) ){
 
-#ifdef PRODEMO
-		shareProtCheck( killer );
-#endif
 		bbruntime_run( gx_runtime,pc,debug );
 
 		gxRuntime *t=gx_runtime;
 		gx_runtime=0;
 		gxRuntime::closeRuntime( t );
 	}
-#ifndef _DEBUG
+
 	_control87( _CW_DEFAULT,0xfffff );
 	_set_se_translator( old_trans );
-#endif
 }
 
 void Runtime::asyncStop(){

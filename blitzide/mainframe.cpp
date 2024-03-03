@@ -193,13 +193,7 @@ void MainFrame::OnDestroy(){
 }
 
 void MainFrame::setTitle( const string &s ){
-#ifdef PRO
 	SetWindowText( ("Blitz3D - "+s ).c_str() );
-	return;
-#else
-	SetWindowText( ("Blitz2D - "+s ).c_str() );
-	return;
-#endif
 }
 
 void MainFrame::OnClose(){
@@ -232,13 +226,9 @@ void MainFrame::OnSize( UINT type,int sw,int sh ){
 static char *bbFilter=
 
 "Blitz Basic files (.bb)|*.bb|"
-
-#ifdef PRO
 "Image files (.bmp,.jpg,.png,.tga,.iff,.pcx)|*.bmp;*.jpg;*.png;*.tga;*.iff;*.pcx|"
 "Audio files (.wav,.mid,.mod,.mp3,.s3m,.xm,.it,.rmi,.sgt)|*.wav;*.mid;*.mod;*.mp3;*.s3m;*.xm;*.it;*.rmi;*.sgt|"
 "3D Mesh files (.x,.3ds,.md2)|*.x;*.3ds;*.md2|"
-#endif
-
 "All files|*.*||";
 
 Editor *MainFrame::getEditor(){
@@ -734,10 +724,6 @@ void MainFrame::programCompile(){
 }
 
 void MainFrame::programPublish(){
-#ifdef DEMO
-	MessageBox( "Create Executable unavailable in demo version","Sorry!",MB_TOPMOST|MB_SETFOREGROUND|MB_ICONINFORMATION );
-	return;
-#endif
 	Editor *e=getEditor();if( !e ) return;
 	if( prefs.prg_debug ){
 		string t=
@@ -898,9 +884,7 @@ static string commandURL( const string &t ){
 
 	static char *dirs[]={
 		"help\\commands\\2d_commands\\",
-#ifdef PRO
 		"help\\commands\\3d_commands\\",
-#endif
 		0
 	};
 

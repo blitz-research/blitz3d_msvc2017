@@ -86,50 +86,13 @@ void aboutBlitz( bool delay ){
 	string lnk_v=itoa(lnk_ver/1000)+"."+itoa(lnk_ver%1000);
 	string run_v=itoa(run_ver/1000)+"."+itoa(run_ver%1000);
 
-	string t="";
-
-#ifdef PRO
-	t+="Blitz3D";
-#else
-	t+="Blitz2D";
-#endif
-
-#ifdef EDU
-	t+=" - Educational Version";
-#else
-#ifdef DEMO
-	t+=" - Demo Version\n\n";
-	/*
-	int n=shareProtCheck();
-	if( n>1 ) t+=itoa(n)+" runs left";
-	else if( n ) t+=itoa(n)+" run left";
-	else t+="expired";
-	t+=")\n\n";
-	*/
-#else
-	t+=" - Release Version\n\n";
-#endif
-#endif
+	string t="Blitz3D - Release Version\n\n";
 
 	about.GetDlgItem( IDC_PRODUCT )->SetWindowText( t.c_str() );
 
 	t="IDE V"+ide_v+"  Linker V"+lnk_v+"  Runtime V"+run_v;
 
 	about.GetDlgItem( IDC_VERSION )->SetWindowText( t.c_str() );
-
-#ifdef DEMO
-
-	if( delay ){
-		about.GetDlgItem( IDOK )->ShowWindow( SW_HIDE );
-		about.GetDlgItem( IDC_PROGRESS1 )->ShowWindow( SW_SHOW );
-		for( int k=0;k<100;++k ){
-			((CProgressCtrl*)about.GetDlgItem( IDC_PROGRESS1 ))->SetPos( k+1 );
-			about.wait( 50 );
-		}
-		about.GetDlgItem( IDOK )->ShowWindow( SW_SHOW );
-	}
-
-#endif
 
 	about.GetDlgItem( IDC_PROGRESS1 )->ShowWindow( SW_HIDE );
 	about.wait();

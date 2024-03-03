@@ -24,10 +24,6 @@ BOOL BlitzIDE::InitInstance(){
 	mainFrame=new MainFrame();
 	m_pMainWnd = mainFrame;
 
-#ifdef DEMO
-	aboutBlitz( true );
-#endif
-
 	mainFrame->LoadFrame( IDR_MAINFRAME );
 	mainFrame->MoveWindow( CRect( prefs.win_rect ) );
 	mainFrame->ShowWindow( m_nCmdShow );

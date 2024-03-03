@@ -40,7 +40,6 @@ public:
 	void open();
 	void close();
 
-
 private:
 
 	void setDefault();

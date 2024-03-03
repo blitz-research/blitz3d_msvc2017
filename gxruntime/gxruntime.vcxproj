@@ -18,13 +18,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -86,7 +86,6 @@
       <AssemblerOutput>NoListing</AssemblerOutput>
       <MinimalRebuild>false</MinimalRebuild>
       <CallingConvention>StdCall</CallingConvention>
-      <AdditionalIncludeDirectories>..\freetype\include</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -153,7 +152,6 @@
     <ClCompile Include="gxscene.cpp" />
     <ClCompile Include="gxsound.cpp" />
     <ClCompile Include="gxtimer.cpp" />
-    <ClCompile Include="gxutf8.cpp" />
     <ClCompile Include="std.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">std.h</PrecompiledHeaderFile>
@@ -180,7 +178,6 @@
     <ClInclude Include="gxscene.h" />
     <ClInclude Include="gxsound.h" />
     <ClInclude Include="gxtimer.h" />
-    <ClInclude Include="gxutf8.h" />
     <ClInclude Include="std.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -100,11 +100,6 @@ string quickHelp( const string &kw ){
 }
 
 bool isMediaFile( const string &f ){
-
-#ifndef PRO
-	return false;
-#endif
-
 	static char *exts[]={
 		"bmp","jpg","png","tga","iff","pcx",
 		"wav","mid","mp3","mod","s3m","xm","it","rmi","sgt",

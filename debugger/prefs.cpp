@@ -3,9 +3,6 @@
 #include "prefs.h"
 #include "debuggerapp.h"
 #include <fstream>
-#include <codecvt> 
-#include <locale> 
-#include <iostream> 
 
 #define SWAPRB(x) ( (((x)>>16)&0xff) | ((x)&0xff00) | (((x)&0xff)<<16) )
 
@@ -25,7 +22,6 @@ void Prefs::open(){
 
 	while( !in.eof() ){
 		string t;in>>t;
-
 		if( !t.size() ) continue;
 		while( in.peek()=='\t' ) in.ignore();
 		if( t=="prg_debug" ) in>>prg_debug;
@@ -46,14 +42,12 @@ void Prefs::open(){
 			}else if( t=="debug" ){
 				font_debug=s;font_debug_height=h;
 			}
-
 		}else if( t.substr( 0,4 )=="rgb_" ){
 			t=t.substr(4);
 			string s;in>>s;int rgb=0;
 			for( int k=0;k<s.size();++k ){
 				int n=s[k];rgb=(rgb<<4)|(n<='9'?n-'0':(n&31)+9);
 			}
-
 			rgb=SWAPRB(rgb);
 
 			if( t=="bkgrnd" ) rgb_bkgrnd=rgb;
@@ -82,8 +76,6 @@ void Prefs::open(){
 			setDefault();
 			return;
 		}
-
-
 	}
 	createFonts();
 }
@@ -138,7 +130,6 @@ void Prefs::setDefault(){
 	font_debug="verdana";
 	font_debug_height=8;
 
-#ifdef PRO
 	rgb_bkgrnd=RGB( 0x22,0x55,0x88 );
 	rgb_string=RGB( 0x00,0xff,0x66 );
 	rgb_ident=RGB( 0xff,0xff,0xff );
@@ -147,7 +138,8 @@ void Prefs::setDefault(){
 	rgb_digit=RGB( 0x33,0xff,0xdd );
 	rgb_default=RGB( 0xee,0xee,0xee );
 	rgb_unsel=RGB( 0x88,0x88,0x88 );
-#else
+
+#if 0 // Old Bltz2D colors!
 	rgb_bkgrnd=RGB( 32,96,96 );
 	rgb_string=RGB( 0,255,0 );
 	rgb_ident=RGB( 255,255,255 );
@@ -180,4 +172,3 @@ void Prefs::createFonts(){
 	debugFont.CreatePointFont( font_debug_height*10,font_debug.c_str() );
 	conFont.CreatePointFont( 80,"courier" );
 }
-

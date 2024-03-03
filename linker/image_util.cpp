@@ -2,8 +2,6 @@
 #include "std.h"
 #include "image_util.h"
 
-#ifndef DEMO
-
 #pragma pack( push,1 )
 struct Head{
 	short machine,num_sects;
@@ -360,6 +358,4 @@ void closeImage(){
 	delete[] stub;
 	img_file=0;
 }
-
-#endif
 

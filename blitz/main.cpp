@@ -196,10 +196,6 @@ int _cdecl main( int argc,char *argv[] ){
 
 	if( !in_file.size() ) return 0;
 
-#ifdef DEMO
-	if( !getenv( "blitzide" ) ) demoError();
-#endif
-
 	if( in_file[0]=='\"' ){
 		if( in_file.size()<3 || in_file[in_file.size()-1]!='\"' ) usageErr();
 		in_file=in_file.substr( 1,in_file.size()-2 );

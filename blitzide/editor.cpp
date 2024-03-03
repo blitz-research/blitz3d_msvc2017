@@ -5,11 +5,7 @@
 
 static bool locked;
 
-#ifdef DEMO
-static const int TEXTLIMIT=16384;
-#else
 static const int TEXTLIMIT=1024*1024-1;
-#endif
 
 static const UINT wm_Find=RegisterWindowMessage( FINDMSGSTRING );
 
