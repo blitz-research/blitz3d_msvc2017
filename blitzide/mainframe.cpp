@@ -14,6 +14,7 @@
 IMPLEMENT_DYNAMIC( MainFrame,CFrameWnd )
 BEGIN_MESSAGE_MAP( MainFrame,CFrameWnd )
 	ON_WM_CREATE()
+	ON_WM_DROPFILES()
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
@@ -108,6 +109,8 @@ MainFrame::MainFrame():exit_flag(false){
 
 int MainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ){
 	CFrameWnd::OnCreate( lpCreateStruct );
+	
+	this->DragAcceptFiles(TRUE);
 
 	static HBITMAP toolbmp;
 	static SIZE imgsz,butsz;
@@ -177,6 +180,16 @@ int MainFrame::OnCreate( LPCREATESTRUCT lpCreateStruct ){
 	}
 
 	return 0;
+}
+
+void MainFrame::OnDropFiles(HDROP hDropInfo) {
+	TCHAR szFileName[MAX_PATH + 1] = {};
+	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, szFileName, MAX_PATH);	//»ñÈ¡ÍÏ·ÅÎÄ¼þµÄ¸öÊý
+	for (int i = 0; i < nFiles; ++i)
+	{
+		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
+		open(szFileName);
+	}
 }
 
 void MainFrame::OnDestroy(){
