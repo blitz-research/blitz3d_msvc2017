@@ -48,6 +48,7 @@ public:
 		BLEND_ADD=		3,
 		BLEND_DOT3=		4,
 		BLEND_MULTIPLY2=5,
+		BLEND_BUMPENVMAP=6,
 	};
 	enum{
 		ZMODE_NORMAL=	0,
@@ -72,6 +73,9 @@ public:
 			gxCanvas *canvas;
 			const Matrix *matrix;
 			int blend,flags;
+			DWORD bumpEnvMat[2][2];
+			DWORD bumpEnvScale;
+			DWORD bumpEnvOffset;
 		}tex_states[MAX_TEXTURES];
 	};
 	
@@ -110,6 +114,8 @@ public:
 
 	//info
 	int getTrianglesDrawn()const;
+	
+	DWORD textureLodBias;
 
 private:
 	gxCanvas *target;
@@ -128,6 +134,9 @@ private:
 	struct TexState{
 		gxCanvas *canvas;
 		int blend,flags;
+		DWORD bumpEnvMat[2][2];
+		DWORD bumpEnvScale;
+		DWORD bumpEnvOffset;
 		D3DMATRIX matrix;
 		bool mat_valid;
 	};

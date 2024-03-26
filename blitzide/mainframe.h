@@ -17,6 +17,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 
 	afx_msg int  OnCreate( LPCREATESTRUCT lpCreateStruct );
+	afx_msg void OnDropFiles(HDROP hDropInfo);
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd( CDC *dc );
